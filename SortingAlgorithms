@@ -1,0 +1,131 @@
+import java.util.Scanner;
+
+public class SortingMenu {
+
+    // Bubble Sort
+    public static void bubbleSort(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j]; 
+                    arr[j] = arr[j + 1]; 
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    // Selection Sort
+    public static void selectionSort(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            int min = i;
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[j] < arr[min]) min = j;
+            }
+            int temp = arr[min]; 
+            arr[min] = arr[i]; 
+            arr[i] = temp;
+        }
+    }
+
+    // Insertion Sort
+    public static void insertionSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j]; 
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
+
+    // Merge Sort
+    public static void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+            merge(arr, left, mid, right);
+        }
+    }
+
+    public static void merge(int[] arr, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+
+        for (int i = 0; i < n1; i++) L[i] = arr[left + i];
+        for (int j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
+
+        int i = 0, j = 0, k = left;
+        while (i < n1 && j < n2) {
+            arr[k++] = (L[i] <= R[j]) ? L[i++] : R[j++];
+        }
+
+        while (i < n1) arr[k++] = L[i++];
+        while (j < n2) arr[k++] = R[j++];
+    }
+
+    // Display array
+    public static void printArray(int[] arr) {
+        System.out.print("Sorted Array: ");
+        for (int num : arr) System.out.print(num + " ");
+        System.out.println();
+    }
+
+    // Main method with menu
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+
+        System.out.println("Enter the elements:");
+        for (int i = 0; i < n; i++) arr[i] = sc.nextInt();
+
+        int choice;
+        do {
+            System.out.println("\n----- Sorting Menu -----");
+            System.out.println("1. Bubble Sort");
+            System.out.println("2. Selection Sort");
+            System.out.println("3. Insertion Sort");
+            System.out.println("4. Merge Sort");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            int[] arrCopy = arr.clone(); // Preserve original array
+
+            switch (choice) {
+                case 1:
+                    bubbleSort(arrCopy);
+                    printArray(arrCopy);
+                    break;
+                case 2:
+                    selectionSort(arrCopy);
+                    printArray(arrCopy);
+                    break;
+                case 3:
+                    insertionSort(arrCopy);
+                    printArray(arrCopy);
+                    break;
+                case 4:
+                    mergeSort(arrCopy, 0, arrCopy.length - 1);
+                    printArray(arrCopy);
+                    break;
+                case 5:
+                    System.out.println("Exiting program.");
+                    break;
+                default:
+                    System.out.println("Invalid choice! Try again.");
+            }
+        } while (choice != 5);
+
+        sc.close();
+    }
+}
